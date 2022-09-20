@@ -6,9 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conjunto.io</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@10.0.0/dist/markdown-it.min.js"></script>
+    
 </head>
 <body> 
-
+    <main id="app">
+        <div id="relacoes">
+            <div id="relacoesConjuntoA">
+                <h3>Relações entre conjuntos</h3>
+                <hr>
+                <label>Conjunto A :</label>
+                <input id="conjuntoA" type="text" title="Conjunto A" placeholder="vazio">
+                <button type="button" id="buttonConjuntoA">OK</button>
+            </div>
+            <div id="relacoesButtons">
+                <button type="button" id="buttonPertinecia">Pertinecia</button>
+                <button type="button" id="buttonSubconjunto">Subconjunto</button>
+                <button type="button" id="buttonIgualdade">Igualdade</button>
+            </div>
+        </div>
+    </main>
     <script src="./scripts.js"></script>
 </body>
 </html>
