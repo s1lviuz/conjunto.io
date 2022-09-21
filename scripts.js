@@ -15,6 +15,17 @@ function mostrarConjunto (idConjnunto, idDoPai, nome) {
         elementPai.append(p)
     }
 }
+function mostrarOperacao (conjunto, operacao, idDoPai, expressao) {
+    let p = document.createElement('p')
+    const elementPai = document.getElementById(idDoPai)
+    if (document.getElementById(`saida${operacao}`)) {
+        document.getElementById(`saida${operacao}`).innerHTML = `<i>${expressao} = {${conjunto}</i>}`
+    } else {
+        p.setAttribute('id',`saida${operacao}`)
+        p.innerHTML = `<i>${expressao} = {${conjunto}}</i>`
+        elementPai.append(p)
+    }
+}
 function ordenarConjunto(conjunto) {
     const conjuntoOrdenado = conjunto.split(",").sort((elemento,proximoElemento) => {
         return (elemento < proximoElemento) ? -1 : (elemento > proximoElemento) ? 1 : 0;
@@ -75,6 +86,94 @@ function verificarIgualdade() {
         document.getElementById('printIgualdade')
         .innerText = saida
     } 
+}
+
+
+// Operações entre conjuntos
+function verificarUniao () {
+    let conjuntoUniao = carregarConjunto('inputOperacoesConjuntoA')
+    const conjuntoB = carregarConjunto('inputOperacoesConjuntoB')
+    if (conjuntoUniao==conjuntoB) {
+        conjuntoUniao = conjuntoB
+    } else {
+        if (conjuntoB.split('').length==1 && conjuntoUniao.split('').length==1) {
+            conjuntoUniao = `${conjuntoUniao},${conjuntoB}`
+        } else {
+            conjuntoB.split(',').forEach((subconjunto) => {
+                if (conjuntoUniao.includes(subconjunto)) {
+                    return
+                } 
+                else {
+                    conjuntoUniao = `${conjuntoUniao},${subconjunto}`
+                }
+            })
+        }
+    }
+    mostrarOperacao(conjuntoUniao,'Uniao', 'operacoesButtons', 'A U B')
+}
+function verificarIntersecao () {
+    const conjuntoA = carregarConjunto('inputOperacoesConjuntoA')
+    const conjuntoB = carregarConjunto('inputOperacoesConjuntoB')
+    const conjuntoAOrdenado = ordenarConjunto(conjuntoA)
+    const conjuntoBOrdenado = ordenarConjunto(conjuntoB)
+    let conjuntoIntersecao = ''
+    if (conjuntoAOrdenado==conjuntoBOrdenado) {
+        conjuntoIntersecao = conjuntoA
+    } else {
+        if (conjuntoB.split('').length==1 && conjuntoIntersecao.split('').length==1) {
+            if (conjuntoA==conjuntoB) {
+                conjuntoIntersecao = conjuntoA
+            } else {
+                return
+            }
+        } else {
+            conjuntoB.split(',').forEach((subconjunto) => {
+                if (conjuntoA.includes(subconjunto)) {
+                    if (conjuntoIntersecao=='') {
+                        conjuntoIntersecao = subconjunto 
+                    } else {
+                        conjuntoIntersecao = `${conjuntoIntersecao},${subconjunto}`
+                    }
+                } 
+                else {
+                    return
+                }
+            })
+        }
+    }
+    mostrarOperacao(conjuntoIntersecao,'Interseção', 'operacoesButtons', 'A ∩ B')
+}
+function verificarDiferenca () {
+    const conjuntoA = carregarConjunto('inputOperacoesConjuntoA')
+    const conjuntoB = carregarConjunto('inputOperacoesConjuntoB')
+    const conjuntoAOrdenado = ordenarConjunto(conjuntoA)
+    const conjuntoBOrdenado = ordenarConjunto(conjuntoB)
+    let conjuntoDiferenca = ''
+    if (conjuntoAOrdenado==conjuntoBOrdenado) {
+        return
+    } else {
+        if (conjuntoB.split('').length==1) {
+            conjuntoA.split(',').forEach((subconjunto) =>{
+                (subconjunto==conjuntoB) ?
+                conjuntoDiferenca = '' :
+                conjuntoDiferenca = subconjunto
+            })
+        } else {
+            conjuntoA.split(',').forEach((subconjunto) => {
+                if (conjuntoB.includes(subconjunto)) {
+                    return
+                } 
+                else {
+                    if (conjuntoDiferenca=='') {
+                        conjuntoDiferenca = subconjunto 
+                    } else {
+                        conjuntoDiferenca = `${conjuntoDiferenca},${subconjunto}`
+                    }
+                }
+            })
+        }
+    }
+    mostrarOperacao(conjuntoDiferenca,'Diferenca', 'operacoesButtons', 'A - B')
 }
 
 
@@ -153,3 +252,6 @@ document.getElementById('buttonIgualdade').addEventListener('click', abrirIguald
 // Listeners Operações
 document.getElementById('buttonOperacoesConjuntoA').addEventListener('click', carregarOperacoesConjuntoA)
 document.getElementById('buttonOperacoesConjuntoB').addEventListener('click', carregarOperacoesConjuntoB)
+document.getElementById('buttonUniao').addEventListener('click', verificarUniao)
+document.getElementById('buttonIntersecao').addEventListener('click', verificarIntersecao)
+document.getElementById('buttonDiferenca').addEventListener('click', verificarDiferenca)
